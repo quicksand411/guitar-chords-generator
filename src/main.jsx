@@ -278,25 +278,60 @@ const App = () => {
         initAudio();
         const ctx = audioCtxRef.current;
         const now = ctx.currentTime + delay;
+
         notes.forEach((note, index) => {
             let octave = index === 0 ? 3 : 4;
             if (index > 3) octave = 5;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
+            const freq = getNoteFrequency(note, octave);
+
+            // Master gain for this specific note to control the piano envelope
+            const noteGain = ctx.createGain();
+            noteGain.connect(ctx.destination);
+            noteGain.gain.setValueAtTime(0, now);
+            // Piano attack: fast ramp up, then smooth exponential decay
+            noteGain.gain.linearRampToValueAtTime(1.0 / notes.length, now + 0.015);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + duration * 1.5);
+
+            // 1. Base Tone (Sine wave for full body sound)
+            const oscSine = ctx.createOscillator();
+            oscSine.type = 'sine';
+            oscSine.frequency.value = freq;
+            oscSine.connect(noteGain);
+            oscSine.start(now);
+            oscSine.stop(now + duration * 1.5);
+
+            // 2. Harmonic Tone (Triangle wave for string-like warmth)
+            const oscTri = ctx.createOscillator();
+            oscTri.type = 'triangle';
+            oscTri.frequency.value = freq * 1.002; // Slight detune for a rich chorus effect
+            const triGain = ctx.createGain();
+            triGain.gain.value = 0.5; // Lower volume for harmonics
+            oscTri.connect(triGain);
+            triGain.connect(noteGain);
+            oscTri.start(now);
+            oscTri.stop(now + duration * 1.5);
+
+            // 3. Hammer Strike (Short burst of higher frequency)
+            const oscStrike = ctx.createOscillator();
+            oscStrike.type = 'square';
+            oscStrike.frequency.value = freq * 4; // High frequency for the hammer noise
+            
+            // Filter to soften the strike
             const filter = ctx.createBiquadFilter();
-            osc.type = index === 0 ? 'sawtooth' : 'triangle';
-            osc.frequency.value = getNoteFrequency(note, octave);
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(index === 0 ? 800 : 3000, now);
-            filter.Q.value = 1;
-            gain.gain.setValueAtTime(0, now);
-            gain.gain.linearRampToValueAtTime(index === 0 ? 0.25 : 0.15, now + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(now);
-            osc.stop(now + duration + 0.1);
+            filter.frequency.setValueAtTime(freq * 6, now);
+            filter.frequency.exponentialRampToValueAtTime(freq, now + 0.1);
+            
+            const strikeGain = ctx.createGain();
+            strikeGain.gain.setValueAtTime(0, now);
+            strikeGain.gain.linearRampToValueAtTime(0.1, now + 0.005); // Super fast attack
+            strikeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1); // Super fast decay
+            
+            oscStrike.connect(filter);
+            filter.connect(strikeGain);
+            strikeGain.connect(noteGain);
+            oscStrike.start(now);
+            oscStrike.stop(now + 0.15);
         });
     }, []);
 

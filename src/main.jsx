@@ -1,4 +1,5 @@
-const { useState, useEffect, useRef, useCallback } = React;
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import ReactDOM from 'react-dom/client';
 
 const IconBase = ({ children, className, ...props }) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>
@@ -211,7 +212,7 @@ const RackSelect = ({ value, onChange, options, icon: Icon, label }) => (
             <select
                 value={value}
                 onChange={onChange}
-                className="mono w-full px-3 py-2.5 text-xs bg-[#141414] border border-[#2a2a2a] focus:border-[#ffb454] text-[#e8e6e1] transition-colors appearance-none hover:border-[#3a3a3a] rounded-none uppercase"
+                className="mono w-full px-3 py-2.5 text-xs bg-[#141414] border border-[#2a2a2a] focus:border-[#ffb454] text-[#e8e6e1] transition-colors appearance-none hover:border-[#3a3a3a] rounded-none uppercase cursor-pointer"
             >
                 {Object.entries(options).map(([key, val]) => (
                     <option key={key} value={key} className="bg-[#141414] text-[#e8e6e1]">{val.name || val.label}</option>
@@ -462,7 +463,7 @@ const App = () => {
                                 type="text"
                                 value={patternInput}
                                 onChange={(e) => setPatternInput(e.target.value)}
-                                className="mono w-full px-3 py-2.5 bg-[#141414] border border-[#2a2a2a] focus:border-[#ffb454] text-[#e8e6e1] text-sm rounded-none uppercase"
+                                className="mono w-full px-3 py-2.5 bg-[#141414] border border-[#2a2a2a] focus:border-[#ffb454] text-[#e8e6e1] text-sm rounded-none uppercase outline-none"
                             />
                             <p className="mono text-[9px] text-[#7a7a7a] mt-2 leading-relaxed">Roman numerals I–VII separated by space or dash, e.g.: i-VI-III-VII</p>
                         </div>
@@ -547,5 +548,8 @@ const App = () => {
     );
 };
 
-const rootEl = ReactDOM.createRoot(document.getElementById('root'));
-rootEl.render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
+);

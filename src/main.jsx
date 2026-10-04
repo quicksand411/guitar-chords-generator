@@ -5,16 +5,17 @@ const IconBase = ({ children, className, ...props }) => (
         {children}
     </svg>
 );
+
 const Pause = (props) => <IconBase {...props}><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></IconBase>;
 const RotateCcw = (props) => <IconBase {...props}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></IconBase>;
 const Volume2 = (props) => <IconBase {...props}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></IconBase>;
 const Copy = (props) => <IconBase {...props}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></IconBase>;
 const Check = (props) => <IconBase {...props}><polyline points="20 6 9 17 4 12"/></IconBase>;
-const PianoIcon = (props) => <IconBase {...props}><path d="M12 2H2v20h20V2Z"/><path d="M6 2v20"/><path d="M18 2v20"/><path d="M12 2v20"/><path d="M2 14h20"/></IconBase>;
+const Piano = (props) => <IconBase {...props}><path d="M12 2H2v20h20V2Z"/><path d="M6 2v20"/><path d="M18 2v20"/><path d="M12 2v20"/><path d="M2 14h20"/></IconBase>;
 const GridIcon = (props) => <IconBase {...props}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="3" x2="21" y1="15" y2="15"/><line x1="9" x2="9" y1="3" y2="21"/><line x1="15" x2="15" y1="3" y2="21"/></IconBase>;
 const Wand2 = (props) => <IconBase {...props}><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/></IconBase>;
-const SlidersIcon = (props) => <IconBase {...props}><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/></IconBase>;
-const SquareIcon = (props) => <IconBase {...props}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/></IconBase>;
+const Sliders = (props) => <IconBase {...props}><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/></IconBase>;
+const Square = (props) => <IconBase {...props}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/></IconBase>;
 
 const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const noteIndex = (n) => NOTES.indexOf(n);
@@ -400,7 +401,7 @@ const App = () => {
                 {/* RACK — Left Control Panel */}
                 <div className="lg:col-span-4 border-r border-[#2a2a2a] bg-[#111111] p-6 flex flex-col gap-6">
                     <div className="flex items-center gap-2 border-b border-[#2a2a2a] pb-2">
-                        <SlidersIcon className="w-3.5 h-3.5 text-[#7a7a7a]" />
+                        <Sliders className="w-3.5 h-3.5 text-[#7a7a7a]" />
                         <RackLabel>Rack</RackLabel>
                     </div>
 
@@ -427,7 +428,7 @@ const App = () => {
                         </div>
                     </div>
 
-                    <RackSelect label="Scale Mode" value={scaleKey} onChange={(e) => setScaleKey(e.target.value)} options={SCALES} icon={PianoIcon} />
+                    <RackSelect label="Scale Mode" value={scaleKey} onChange={(e) => setScaleKey(e.target.value)} options={SCALES} icon={Piano} />
 
                     {mode === 'random' ? (
                         <>
@@ -540,7 +541,7 @@ const App = () => {
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center text-[#3a3a3a] h-96 border border-dashed border-[#2a2a2a]">
-                            <SquareIcon className="w-12 h-12 mb-3 opacity-30" />
+                            <Square className="w-12 h-12 mb-3 opacity-30" />
                             <p className="mono uppercase tracking-widest text-xs">No sequence data</p>
                         </div>
                     )}

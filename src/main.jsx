@@ -1,18 +1,16 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import ReactDOM from 'react-dom/client';
+const { useState, useEffect, useRef, useCallback } = React;
 
 const IconBase = ({ children, className, ...props }) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>
         {children}
     </svg>
 );
-
 const Pause = (props) => <IconBase {...props}><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></IconBase>;
 const RotateCcw = (props) => <IconBase {...props}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></IconBase>;
 const Volume2 = (props) => <IconBase {...props}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></IconBase>;
 const Copy = (props) => <IconBase {...props}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></IconBase>;
 const Check = (props) => <IconBase {...props}><polyline points="20 6 9 17 4 12"/></IconBase>;
-const Piano = (props) => <IconBase {...props}><path d="M12 2H2v20h20V2Z"/><path d="M6 2v20"/><path d="M18 2v20"/><path d="M12 2v20"/><path d="M2 14h20"/></IconBase>;
+const PianoIcon = (props) => <IconBase {...props}><path d="M12 2H2v20h20V2Z"/><path d="M6 2v20"/><path d="M18 2v20"/><path d="M12 2v20"/><path d="M2 14h20"/></IconBase>;
 const GridIcon = (props) => <IconBase {...props}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="3" x2="21" y1="15" y2="15"/><line x1="9" x2="9" y1="3" y2="21"/><line x1="15" x2="15" y1="3" y2="21"/></IconBase>;
 const Wand2 = (props) => <IconBase {...props}><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/></IconBase>;
 const SlidersIcon = (props) => <IconBase {...props}><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/></IconBase>;
@@ -58,13 +56,11 @@ const parseDegreeToken = (tok) => {
 const FUNCTION_GROUPS = { tonic: [0, 2, 5], subdominant: [1, 3], dominant: [4, 6] };
 const FUNCTION_OF_DEGREE = {};
 Object.entries(FUNCTION_GROUPS).forEach(([fn, degs]) => degs.forEach(d => FUNCTION_OF_DEGREE[d] = fn));
-
 const TRANSITIONS = {
     tonic: { subdominant: 0.4, dominant: 0.35, tonic: 0.25 },
     subdominant: { dominant: 0.55, tonic: 0.25, subdominant: 0.2 },
     dominant: { tonic: 0.65, subdominant: 0.15, dominant: 0.2 },
 };
-
 const FN_COLOR = { tonic: '#ffb454', subdominant: '#4fd1c5', dominant: '#e6534d' };
 const FN_LABEL = { tonic: 'T', subdominant: 'S', dominant: 'D' };
 
@@ -97,7 +93,6 @@ const TRIAD_TABLE = {
     '4_6': { suffix: '(b5)', tag: 'maj' },
     '3_8': { suffix: 'm(#5)', tag: 'min' },
 };
-
 const triadQuality = (rootNote, third, fifth) => {
     const i3 = semitoneDist(rootNote, third);
     const i5 = semitoneDist(rootNote, fifth);
@@ -202,7 +197,7 @@ const generateDegrees = (length, scaleLen, feel) => {
 };
 
 const RackLabel = ({ children }) => (
-    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#7a7a7a] font-bold">{children}</span>
+    <span className="mono text-[10px] uppercase tracking-[0.2em] text-[#7a7a7a] font-bold">{children}</span>
 );
 
 const RackSelect = ({ value, onChange, options, icon: Icon, label }) => (
@@ -215,7 +210,7 @@ const RackSelect = ({ value, onChange, options, icon: Icon, label }) => (
             <select
                 value={value}
                 onChange={onChange}
-                className="font-mono w-full px-3 py-2.5 text-xs bg-[#141414] border border-[#2a2a2a] focus:border-[#ffb454] text-[#e8e6e1] transition-colors appearance-none hover:border-[#3a3a3a] rounded-none uppercase"
+                className="mono w-full px-3 py-2.5 text-xs bg-[#141414] border border-[#2a2a2a] focus:border-[#ffb454] text-[#e8e6e1] transition-colors appearance-none hover:border-[#3a3a3a] rounded-none uppercase"
             >
                 {Object.entries(options).map(([key, val]) => (
                     <option key={key} value={key} className="bg-[#141414] text-[#e8e6e1]">{val.name || val.label}</option>
@@ -234,7 +229,7 @@ const SegmentedControl = ({ value, onChange, options }) => (
             <button
                 key={key}
                 onClick={() => onChange(key)}
-                className={`font-mono flex-1 px-3 py-2 text-[10px] font-bold uppercase tracking-wider transition-all ${i > 0 ? 'border-l border-[#2a2a2a]' : ''} ${value === key ? 'bg-[#ffb454] text-black' : 'text-[#7a7a7a] hover:text-[#e8e6e1] hover:bg-[#1c1c1c]'}`}
+                className={`mono flex-1 px-3 py-2 text-[10px] font-bold uppercase tracking-wider transition-all ${i > 0 ? 'border-l border-[#2a2a2a]' : ''} ${value === key ? 'bg-[#ffb454] text-black' : 'text-[#7a7a7a] hover:text-[#e8e6e1] hover:bg-[#1c1c1c]'}`}
             >
                 {text}
             </button>
@@ -274,7 +269,7 @@ const App = () => {
         return baseFreq * Math.pow(2, (midi - 69) / 12);
     };
 
-    const playChordSound = useCallback((notes, duration = 1.0, delay = 0) => {
+    const playChordSound = useCallback((notes, duration = 1.2, delay = 0) => {
         initAudio();
         const ctx = audioCtxRef.current;
         const now = ctx.currentTime + delay;
@@ -284,54 +279,48 @@ const App = () => {
             if (index > 3) octave = 5;
             const freq = getNoteFrequency(note, octave);
 
-            // Master gain for this specific note to control the piano envelope
             const noteGain = ctx.createGain();
             noteGain.connect(ctx.destination);
             noteGain.gain.setValueAtTime(0, now);
-            // Piano attack: fast ramp up, then smooth exponential decay
-            noteGain.gain.linearRampToValueAtTime(1.0 / notes.length, now + 0.015);
-            noteGain.gain.exponentialRampToValueAtTime(0.001, now + duration * 1.5);
+            noteGain.gain.linearRampToValueAtTime(1.0 / notes.length, now + 0.02);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + duration * 1.6);
 
-            // 1. Base Tone (Sine wave for full body sound)
+            // Sine oscillator for pure warm body
             const oscSine = ctx.createOscillator();
             oscSine.type = 'sine';
             oscSine.frequency.value = freq;
             oscSine.connect(noteGain);
             oscSine.start(now);
-            oscSine.stop(now + duration * 1.5);
+            oscSine.stop(now + duration * 1.6);
 
-            // 2. Harmonic Tone (Triangle wave for string-like warmth)
+            // Triangle oscillator for electric piano timber
             const oscTri = ctx.createOscillator();
             oscTri.type = 'triangle';
-            oscTri.frequency.value = freq * 1.002; // Slight detune for a rich chorus effect
+            oscTri.frequency.value = freq * 1.003;
             const triGain = ctx.createGain();
-            triGain.gain.value = 0.5; // Lower volume for harmonics
+            triGain.gain.value = 0.4;
             oscTri.connect(triGain);
             triGain.connect(noteGain);
             oscTri.start(now);
-            oscTri.stop(now + duration * 1.5);
+            oscTri.stop(now + duration * 1.6);
 
-            // 3. Hammer Strike (Short burst of higher frequency)
+            // Hammer transient sound
             const oscStrike = ctx.createOscillator();
             oscStrike.type = 'square';
-            oscStrike.frequency.value = freq * 4; // High frequency for the hammer noise
-            
-            // Filter to soften the strike
+            oscStrike.frequency.value = freq * 3.5;
             const filter = ctx.createBiquadFilter();
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(freq * 6, now);
-            filter.frequency.exponentialRampToValueAtTime(freq, now + 0.1);
-            
+            filter.frequency.setValueAtTime(freq * 5, now);
+            filter.frequency.exponentialRampToValueAtTime(freq, now + 0.08);
             const strikeGain = ctx.createGain();
             strikeGain.gain.setValueAtTime(0, now);
-            strikeGain.gain.linearRampToValueAtTime(0.1, now + 0.005); // Super fast attack
-            strikeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1); // Super fast decay
-            
+            strikeGain.gain.linearRampToValueAtTime(0.08, now + 0.004);
+            strikeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
             oscStrike.connect(filter);
             filter.connect(strikeGain);
             strikeGain.connect(noteGain);
             oscStrike.start(now);
-            oscStrike.stop(now + 0.15);
+            oscStrike.stop(now + 0.1);
         });
     }, []);
 
@@ -347,7 +336,7 @@ const App = () => {
         if (chords.length === 0) return;
         setIsPlaying(true);
         setActiveChordIndex(0);
-        const step = 1.2;
+        const step = 1.3;
         chords.forEach((chord, i) => {
             timeoutRefs.current.push(setTimeout(() => setActiveChordIndex(i), i * step * 1000));
             playChordSound(chord.notes, step, i * step);
@@ -361,7 +350,6 @@ const App = () => {
     const generate = () => {
         stopPlaying();
         const scaleNotes = getScaleNotesFull(root, scaleKey);
-
         let degrees;
         if (mode === 'pattern') {
             const tokens = patternInput.trim().split(/[\s\-,]+/).filter(Boolean);
@@ -394,22 +382,22 @@ const App = () => {
     const showsFunctionalNote = !(mode !== 'random' || feel !== 'tight' || scaleLen === 7);
 
     return (
-        <div className="w-full min-h-screen bg-[#0d0d0d] text-[#e8e6e1] overflow-hidden relative border-0 md:border md:border-[#2a2a2a] md:rounded-lg">
+        <div className="bg-[#0d0d0d] text-[#e8e6e1] overflow-x-hidden relative min-h-full pb-10">
             {/* Transport bar */}
             <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 px-6 py-4 border-b border-[#2a2a2a] bg-gradient-to-b from-[#1a1a1a] to-[#141414]">
                 <div className="flex items-center gap-3">
                     <div className="w-2.5 h-2.5 rounded-full bg-[#ffb454]" style={{ boxShadow: '0 0 8px #ffb454' }} />
-                    <h1 className="font-mono text-sm font-bold uppercase tracking-[0.3em] text-[#e8e6e1]">Chord Rack</h1>
+                    <h1 className="mono text-sm font-bold uppercase tracking-[0.3em] text-[#e8e6e1]">Chord Rack</h1>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-[#7a7a7a]">Key</span>
-                    <span className="font-mono text-sm font-bold text-[#ffb454]">{root} {SCALES[scaleKey].name}</span>
+                    <span className="mono text-[10px] uppercase tracking-widest text-[#7a7a7a]">Key</span>
+                    <span className="mono text-sm font-bold text-[#ffb454]">{root} {SCALES[scaleKey].name}</span>
                 </div>
                 <SegmentedControl value={mode} onChange={setMode} options={[['random', 'Random'], ['pattern', 'Pattern']]} />
             </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-                {/* RACK — Left Panel */}
+                {/* RACK — Left Control Panel */}
                 <div className="lg:col-span-4 border-r border-[#2a2a2a] bg-[#111111] p-6 flex flex-col gap-6">
                     <div className="flex items-center gap-2 border-b border-[#2a2a2a] pb-2">
                         <SlidersIcon className="w-3.5 h-3.5 text-[#7a7a7a]" />
@@ -429,7 +417,7 @@ const App = () => {
                                     <button
                                         key={n}
                                         onClick={() => setRoot(n)}
-                                        className={`font-mono h-10 flex items-center justify-center text-xs font-bold whitespace-nowrap transition-all ${active ? 'bg-[#ffb454] text-black' : isSharp ? 'bg-[#0d0d0d] text-[#7a7a7a] hover:text-[#e8e6e1]' : 'bg-[#1a1a1a] text-[#a8a8a8] hover:text-[#e8e6e1]'}`}
+                                        className={`mono h-10 flex items-center justify-center text-xs font-bold whitespace-nowrap transition-all ${active ? 'bg-[#ffb454] text-black' : isSharp ? 'bg-[#0d0d0d] text-[#7a7a7a] hover:text-[#e8e6e1]' : 'bg-[#1a1a1a] text-[#a8a8a8] hover:text-[#e8e6e1]'}`}
                                         style={{ whiteSpace: 'nowrap', fontSize: '12px', lineHeight: 1, letterSpacing: 'normal', padding: 0, margin: 0 }}
                                     >
                                         {n}
@@ -439,7 +427,7 @@ const App = () => {
                         </div>
                     </div>
 
-                    <RackSelect label="Scale Mode" value={scaleKey} onChange={(e) => setScaleKey(e.target.value)} options={SCALES} icon={Piano} />
+                    <RackSelect label="Scale Mode" value={scaleKey} onChange={(e) => setScaleKey(e.target.value)} options={SCALES} icon={PianoIcon} />
 
                     {mode === 'random' ? (
                         <>
@@ -449,8 +437,8 @@ const App = () => {
                                 <div className="flex items-center gap-1.5 mb-2"><RackLabel>Feel</RackLabel></div>
                                 <SegmentedControl value={feel} onChange={setFeel} options={[['tight', 'Tight'], ['loose', 'Loose']]} />
                                 {showsFunctionalNote ? (
-                                    <p className="font-mono text-[9px] text-[#7a7a7a] mt-2 leading-relaxed">
-                                        For {SCALES[scaleKey].name} progressions, gravity is relaxed since it's not a standard diatonic scale.
+                                    <p className="mono text-[9px] text-[#7a7a7a] mt-2 leading-relaxed">
+                                        For {SCALES[scaleKey].name}, gravity is relaxed since it's not a standard 7-degree scale.
                                     </p>
                                 ) : null}
                             </div>
@@ -458,10 +446,10 @@ const App = () => {
                             <div>
                                 <div className="flex justify-between items-baseline mb-2">
                                     <RackLabel>Length</RackLabel>
-                                    <span className="font-mono text-sm font-bold text-[#ffb454]">{progressionLength}</span>
+                                    <span className="mono text-sm font-bold text-[#ffb454]">{progressionLength}</span>
                                 </div>
                                 <input type="range" min="2" max="8" value={progressionLength} onChange={(e) => setProgressionLength(+e.target.value)} className="w-full cursor-pointer" />
-                                <div className="flex justify-between font-mono text-[9px] text-[#4a4a4a] mt-1 px-0.5">
+                                <div className="flex justify-between mono text-[9px] text-[#4a4a4a] mt-1 px-0.5">
                                     {[2, 3, 4, 5, 6, 7, 8].map(n => <span key={n}>{n}</span>)}
                                 </div>
                             </div>
@@ -476,23 +464,23 @@ const App = () => {
                                 type="text"
                                 value={patternInput}
                                 onChange={(e) => setPatternInput(e.target.value)}
-                                className="font-mono w-full px-3 py-2.5 bg-[#141414] border border-[#2a2a2a] focus:border-[#ffb454] text-[#e8e6e1] text-sm rounded-none uppercase outline-none"
+                                className="mono w-full px-3 py-2.5 bg-[#141414] border border-[#2a2a2a] focus:border-[#ffb454] text-[#e8e6e1] text-sm rounded-none uppercase"
                             />
-                            <p className="font-mono text-[9px] text-[#7a7a7a] mt-2 leading-relaxed">Roman Numerals I–VII separated by space or dash: i-VI-III-VII</p>
+                            <p className="mono text-[9px] text-[#7a7a7a] mt-2 leading-relaxed">Roman numerals I–VII separated by space or dash, e.g.: i-VI-III-VII</p>
                         </div>
                     )}
 
-                    <div className="mt-auto pt-4 border-t border-[#2a2a2a] flex flex-col gap-2">
+                    <div className="pt-4 border-t border-[#2a2a2a] flex flex-col gap-2">
                         <div className="flex gap-2 h-12">
                             <button onClick={generate} className="flex-grow bg-[#ffb454] text-black hover:bg-[#ffc474] font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2 group">
                                 <RotateCcw className="w-4 h-4 group-hover:-rotate-180 transition-transform duration-500" />
                                 <span>Generate</span>
                             </button>
                             <button onClick={playProgression} className={`w-14 flex items-center justify-center border border-[#2a2a2a] hover:border-[#ffb454] transition-all ${isPlaying ? 'bg-[#1c1c1c] text-[#ffb454]' : 'bg-[#141414] text-[#e8e6e1]'}`}>
-                                {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <span className="font-mono font-bold text-[10px]">Play</span>}
+                                {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <span className="mono font-bold text-[10px]">Play</span>}
                             </button>
                         </div>
-                        <button onClick={copyChords} className="font-mono text-[10px] uppercase tracking-widest text-[#7a7a7a] hover:text-[#e8e6e1] transition-colors flex items-center justify-center gap-1.5 py-1">
+                        <button onClick={copyChords} className="mono text-[10px] uppercase tracking-widest text-[#7a7a7a] hover:text-[#e8e6e1] transition-colors flex items-center justify-center gap-1.5 py-1">
                             {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
                             {copied ? 'Copied' : 'Copy sequence'}
                         </button>
@@ -508,7 +496,7 @@ const App = () => {
                                 {['tonic', 'subdominant', 'dominant'].map(fn => (
                                     <div key={fn} className="flex items-center gap-1.5">
                                         <div className="w-1.5 h-1.5 rounded-full" style={{ background: FN_COLOR[fn] }} />
-                                        <span className="font-mono text-[9px] uppercase tracking-widest text-[#7a7a7a]">{FN_LABEL[fn]}</span>
+                                        <span className="mono text-[9px] uppercase tracking-widest text-[#7a7a7a]">{FN_LABEL[fn]}</span>
                                     </div>
                                 ))}
                             </div>
@@ -528,7 +516,7 @@ const App = () => {
                                         style={active ? { boxShadow: `inset 0 0 0 1px ${fnColor}` } : {}}
                                     >
                                         <div className="flex justify-between items-start">
-                                            <span className="font-mono text-xs font-bold text-[#7a7a7a]">{chord.roman}</span>
+                                            <span className="mono text-xs font-bold text-[#7a7a7a]">{chord.roman}</span>
                                             <div className="flex items-center gap-1.5">
                                                 {active ? <Volume2 className="w-3.5 h-3.5" style={{ color: fnColor }} /> : null}
                                                 {chord.fn ? <div className="w-1.5 h-1.5 rounded-full" style={{ background: fnColor, boxShadow: active ? `0 0 6px ${fnColor}` : 'none' }} /> : null}
@@ -536,8 +524,8 @@ const App = () => {
                                         </div>
 
                                         <div className="text-center my-3">
-                                            <h3 className="font-mono text-3xl font-extrabold tracking-tight mb-1.5" style={{ color: active ? fnColor : '#e8e6e1' }}>{chord.name}</h3>
-                                            <p className="font-mono text-[9px] tracking-widest uppercase text-[#5a5a5a]">{chord.notes.join(' ')}</p>
+                                            <h3 className="mono text-3xl font-extrabold tracking-tight mb-1.5" style={{ color: active ? fnColor : '#e8e6e1' }}>{chord.name}</h3>
+                                            <p className="mono text-[9px] tracking-widest uppercase text-[#5a5a5a]">{chord.notes.join(' ')}</p>
                                         </div>
 
                                         <div className="flex items-end justify-center gap-[3px] h-10">
@@ -553,7 +541,7 @@ const App = () => {
                     ) : (
                         <div className="flex flex-col items-center justify-center text-[#3a3a3a] h-96 border border-dashed border-[#2a2a2a]">
                             <SquareIcon className="w-12 h-12 mb-3 opacity-30" />
-                            <p className="font-mono uppercase tracking-widest text-xs">No sequence data</p>
+                            <p className="mono uppercase tracking-widest text-xs">No sequence data</p>
                         </div>
                     )}
                 </div>
@@ -562,8 +550,5 @@ const App = () => {
     );
 };
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
-);
+const rootEl = ReactDOM.createRoot(document.getElementById('root'));
+rootEl.render(<App />);
